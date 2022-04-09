@@ -9,7 +9,7 @@
           <div class="mb-2">
             <label for="name">Name</label>
             <input
-              v-model="payment.fullname"
+              v-model="payment.shipping.fullname"
               type="text"
               name="name"
               id="name"
@@ -19,7 +19,7 @@
           <div class="mb-2">
             <label for="company">Company</label>
             <input
-              v-model="payment.company"
+              v-model="payment.shipping.company"
               type="text"
               name="company"
               id="company"
@@ -29,7 +29,7 @@
           <div class="mb-2">
             <label for="address">Address</label>
             <input
-              v-model="payment.address"
+              v-model="payment.shipping.address"
               type="text"
               name="address"
               id="address"
@@ -40,7 +40,7 @@
             <div class="col">
               <label for="city">City</label>
               <input
-                v-model="payment.city"
+                v-model="payment.shipping.city"
                 type="text"
                 name="city"
                 id="city"
@@ -51,7 +51,7 @@
               <label for="states">States</label>
               <select
                 class="form-select"
-                v-model="payment.states"
+                v-model="payment.shipping.states"
                 name="states"
                 id="states"
               >
@@ -81,6 +81,17 @@
         </div>
         <div class="col">
           <div><strong>Billing information</strong></div>
+          <div class="form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              name="sameAsShipping"
+              id="sameAdShipping"
+            />
+            <label class="form-check-label" for="sameAsShipping"
+              >Same as shipping</label
+            >
+          </div>
         </div>
       </div>
     </form>
@@ -91,12 +102,12 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, reactive } from "vue";
 import states from "./data/states.js";
 export default {
   name: "App",
   setup() {
-    const payment = ref({ zipCode: "" });
+    const payment = reactive({ shipping: { zipCode: "" }, billing: {} });
     const error = ref("");
 
     function handleSave() {
@@ -104,12 +115,12 @@ export default {
     }
 
     const zipCode = computed({
-      get: () => payment.value.zipCode,
+      get: () => payment.shipping.zipCode,
       set: (value) => {
         if (value.length > 5 && value.indexOf("-") === -1) {
           value = value.substring(0, 5) + "-" + value.substring(5);
         }
-        payment.value.zipCode = value;
+        payment.shipping.zipCode = value;
       },
     });
 
