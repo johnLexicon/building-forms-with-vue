@@ -1,12 +1,12 @@
 <template>
   <Error :message="errorMessage" />
-  <PaymentView @onError="reportError" />
+  <PaymentView />
 </template>
 
 <script>
-import { ref } from "vue";
 import PaymentView from "./views/PaymentView.vue";
 import Error from "@/components/Error.vue";
+import state from "@/state";
 export default {
   name: "App",
   components: {
@@ -14,13 +14,7 @@ export default {
     Error,
   },
   setup() {
-    const errorMessage = ref("");
-
-    function reportError(message) {
-      errorMessage.value = message;
-    }
-
-    return { errorMessage, reportError };
+    return { errorMessage: state.errorMessage };
   },
 };
 </script>

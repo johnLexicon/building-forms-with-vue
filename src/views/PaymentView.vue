@@ -8,7 +8,7 @@
           <div class="mb-2">
             <label for="name">Name</label>
             <input
-              v-model="payment.shipping.fullname"
+              v-model="payment.shipping.name"
               type="text"
               name="name"
               id="name"
@@ -25,10 +25,7 @@
               class="form-control"
             />
           </div>
-          <address-view
-            :address="payment.shipping.address"
-            :isDisabled="false"
-          />
+          <address-view :address="payment.shipping" :isDisabled="false" />
           <div>
             <input class="btn btn-primary" type="submit" value="Next" />
           </div>
@@ -48,7 +45,7 @@
             >
           </div>
           <address-view
-            :address="payment.billing.address"
+            :address="payment.billing"
             :isDisabled="payment.billing.sameAsShipment"
           />
           <div><strong>Credit Card</strong></div>
@@ -134,15 +131,10 @@ import state from "../state";
 export default {
   name: "PaymentView",
   components: {
-    Error,
     AddressView,
   },
-  setup(_, { emit }) {
-    const payment = reactive({
-      shipping: { address: {} },
-      billing: { sameAsShipment: false, address: {} },
-      creditcard: {},
-    });
+  setup() {
+    const payment = reactive(state);
 
     const years = Array.from(
       { length: 10 },
@@ -150,7 +142,7 @@ export default {
     );
 
     function handleSave() {
-      emit("onError", "No API available.");
+      state.errorMessage.value = "No API available.";
     }
 
     watch(
@@ -159,7 +151,7 @@ export default {
       // What to do
       () => {
         if (payment.billing.sameAsShipment === true) {
-          payment.billing.address = {};
+          payment.billing.clear();
         }
       }
     );

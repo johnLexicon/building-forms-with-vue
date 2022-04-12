@@ -5,4 +5,11 @@ export default class AddressModel {
   city = ref('');
   stateProvince = ref('');
   zipCode = ref('');
+
+  clear() {
+    this.street = '';
+    this.city = '';
+    this.stateProvince = '';
+    this.zipCode = '';
+  }
 }
