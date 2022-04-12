@@ -1,7 +1,6 @@
 <template>
   <div class="container-lg container-fluid">
     <h1>Payment</h1>
-    <Error :message="error" />
     <form novalidate class="grid" @submit.prevent="handleSave">
       <div class="row">
         <div class="col">
@@ -130,7 +129,6 @@
 <script>
 import { ref, computed, reactive, watch } from "vue";
 import months from "@/data/months.js";
-import Error from "@/components/Error.vue";
 import AddressView from "./AddressView.vue";
 export default {
   name: "PaymentView",
@@ -138,20 +136,20 @@ export default {
     Error,
     AddressView,
   },
-  setup() {
+  setup(_, { emit }) {
     const payment = reactive({
       shipping: { address: {} },
       billing: { sameAsShipment: false, address: {} },
       creditcard: {},
     });
-    const error = ref("");
+
     const years = Array.from(
       { length: 10 },
       (_, index) => new Date().getUTCFullYear() + index
     );
 
     function handleSave() {
-      error.value = "No API available.";
+      emit("onError", "No API available.");
     }
 
     watch(
@@ -165,7 +163,7 @@ export default {
       }
     );
 
-    return { payment, handleSave, error, years, months };
+    return { payment, handleSave, years, months };
   },
 };
 </script>
