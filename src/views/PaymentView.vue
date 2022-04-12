@@ -127,9 +127,10 @@
 </template>
 
 <script>
-import { ref, computed, reactive, watch } from "vue";
+import { reactive, watch } from "vue";
 import months from "@/data/months.js";
 import AddressView from "./AddressView.vue";
+import state from "../state";
 export default {
   name: "PaymentView",
   components: {
