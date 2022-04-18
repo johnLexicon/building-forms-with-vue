@@ -2,31 +2,33 @@
   <div class="mb-2">
     <label for="street">Street</label>
     <input
-      v-model="address.street"
+      v-model="addressModel.street.$model"
       type="text"
       name="street"
       id="street"
       class="form-control"
       :disabled="isDisabled"
     />
+    <validation-message :model="addressModel.street" />
   </div>
   <div class="row mb-2">
     <div class="col">
       <label for="city">City</label>
       <input
-        v-model="address.city"
+        v-model="addressModel.city.$model"
         type="text"
         name="city"
         id="city"
         class="form-control"
         :disabled="isDisabled"
       />
+      <validation-message :model="addressModel.city" />
     </div>
     <div class="col">
       <label for="states">States</label>
       <select
         class="form-select"
-        v-model="address.stateProvince"
+        v-model="addressModel.stateProvince.$model"
         name="states"
         id="states"
         :disabled="isDisabled"
@@ -39,6 +41,7 @@
           {{ state.name }}
         </option>
       </select>
+      <validation-message :model="addressModel.stateProvince" />
     </div>
     <div class="col">
       <label for="zipcode">Zipcode</label>
@@ -50,6 +53,7 @@
         class="form-control"
         :disabled="isDisabled"
       />
+      <validation-message :model="addressModel.zipCode" />
     </div>
   </div>
 </template>
@@ -57,8 +61,14 @@
 <script>
 import { computed } from "vue";
 import states from "@/data/states.js";
+import { required, minLength } from "@vuelidate/validators";
+import useVuelidate from "@vuelidate/core";
+import ValidationMessage from "@/components/ValidationMessage.vue";
 export default {
   name: "AddressView",
+  components: {
+    ValidationMessage,
+  },
   props: {
     address: {
       type: Object,
@@ -68,16 +78,25 @@ export default {
     },
   },
   setup(props) {
+    const rules = {
+      street: { required, minLength: minLength(5) },
+      city: { required, minLength: minLength(2) },
+      stateProvince: { required },
+      zipCode: { required, minLength: minLength(5) },
+    };
+
+    const addressModel = useVuelidate(rules, props.address);
+
     const zipCode = computed({
-      get: () => props.address.zipCode,
+      get: () => addressModel.value.zipCode.$model,
       set: (value) => {
         if (value.length > 5 && value.indexOf("-") === -1) {
           value = value.substring(0, 5) + "-" + value.substring(5);
         }
-        props.address.zipCode = value;
+        addressModel.value.zipCode.$model = value;
       },
     });
-    return { zipCode, states };
+    return { addressModel, zipCode, states };
   },
 };
 </script>
