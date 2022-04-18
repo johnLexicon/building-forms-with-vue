@@ -144,7 +144,7 @@ import state from "../state";
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import ValidationMessage from "@/components/ValidationMessage.vue";
-
+import { creditCard } from "@/validators";
 export default {
   name: "PaymentView",
   components: {
@@ -160,7 +160,7 @@ export default {
     );
 
     const rules = {
-      number: { required },
+      number: { required, creditCard },
       name: { required },
       expirationMonth: { required },
       expirationYear: { required },
