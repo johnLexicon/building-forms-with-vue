@@ -55,7 +55,7 @@
               id="ccNumber"
               type="text"
               class="form-control"
-              v-model="payment.creditcard.number"
+              v-model="creditCardModel.number.$model"
             />
           </div>
           <div>
@@ -64,7 +64,7 @@
               id="cardName"
               type="text"
               class="form-control"
-              v-model="payment.creditcard.name"
+              v-model="creditCardModel.name.$model"
             />
           </div>
           <div class="row">
@@ -75,7 +75,7 @@
                   class="form-select"
                   name="expirationMonth"
                   id="expirationMonth"
-                  v-model="payment.creditcard.expirationMonth"
+                  v-model="creditCardModel.expirationMonth.$model"
                 >
                   <option
                     v-for="month in months"
@@ -94,7 +94,7 @@
                   class="form-select"
                   name="expirationYear"
                   id="expirationYear"
-                  v-model="payment.creditcard.expirationYear"
+                  v-model="creditCardModel.expirationYear.$model"
                 >
                   <option v-for="year in years" :key="year" :value="year">
                     {{ year }}
@@ -109,7 +109,7 @@
                   id="cvv"
                   type="text"
                   class="form-control"
-                  v-model="payment.creditcard.cvv"
+                  v-model="creditCardModel.cvv.$model"
                 />
               </div>
             </div>
@@ -120,6 +120,9 @@
     <div>
       <pre>{{ payment }}</pre>
     </div>
+    <div>
+      <pre>{{ creditCardModel }}</pre>
+    </div>
   </div>
 </template>
 
@@ -128,6 +131,9 @@ import { reactive, watch } from "vue";
 import months from "@/data/months.js";
 import AddressView from "./AddressView.vue";
 import state from "../state";
+import useValidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+
 export default {
   name: "PaymentView",
   components: {
@@ -140,6 +146,16 @@ export default {
       { length: 10 },
       (_, index) => new Date().getUTCFullYear() + index
     );
+
+    const rules = {
+      number: { required },
+      name: { required },
+      expirationMonth: { required },
+      expirationYear: { required },
+      cvv: { required },
+    };
+
+    const creditCardModel = useValidate(rules, state.creditcard);
 
     function handleSave() {
       state.errorMessage.value = "No API available.";
@@ -156,7 +172,7 @@ export default {
       }
     );
 
-    return { payment, handleSave, years, months };
+    return { payment, handleSave, years, months, creditCardModel };
   },
 };
 </script>
