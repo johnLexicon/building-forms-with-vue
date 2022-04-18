@@ -27,7 +27,12 @@
           </div>
           <address-view :address="payment.shipping" :isDisabled="false" />
           <div>
-            <input class="btn btn-primary" type="submit" value="Next" />
+            <input
+              class="btn btn-primary"
+              type="submit"
+              value="Next"
+              :disabled="creditCardModel.$invalid"
+            />
           </div>
         </div>
         <div class="col">
@@ -164,8 +169,10 @@ export default {
 
     const creditCardModel = useValidate(rules, state.creditcard);
 
-    function handleSave() {
-      state.errorMessage.value = "No API available.";
+    async function handleSave() {
+      const result = await creditCardModel.value.$validate();
+
+      state.errorMessage.value = result.toString();
     }
 
     watch(
