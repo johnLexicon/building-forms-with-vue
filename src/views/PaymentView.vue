@@ -127,12 +127,12 @@
         </div>
       </div>
     </form>
-    <div>
+    <!-- <div>
       <pre>{{ payment }}</pre>
     </div>
     <div>
       <pre>{{ creditCardModel }}</pre>
-    </div>
+    </div> -->
   </div>
 </template>
 
