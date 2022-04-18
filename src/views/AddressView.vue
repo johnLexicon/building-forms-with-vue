@@ -61,8 +61,6 @@
 <script>
 import { computed } from "vue";
 import states from "@/data/states.js";
-import { required, minLength } from "@vuelidate/validators";
-import useVuelidate from "@vuelidate/core";
 import ValidationMessage from "@/components/ValidationMessage.vue";
 export default {
   name: "AddressView",
@@ -78,14 +76,7 @@ export default {
     },
   },
   setup(props) {
-    const rules = {
-      street: { required, minLength: minLength(5) },
-      city: { required, minLength: minLength(2) },
-      stateProvince: { required },
-      zipCode: { required, minLength: minLength(5) },
-    };
-
-    const addressModel = useVuelidate(rules, props.address);
+    const addressModel = props.address.toModel();
 
     const zipCode = computed({
       get: () => addressModel.value.zipCode.$model,

@@ -141,10 +141,7 @@ import { reactive, watch } from "vue";
 import months from "@/data/months.js";
 import AddressView from "./AddressView.vue";
 import state from "../state";
-import useValidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
 import ValidationMessage from "@/components/ValidationMessage.vue";
-import { creditCard } from "@/validators";
 export default {
   name: "PaymentView",
   components: {
@@ -159,15 +156,7 @@ export default {
       (_, index) => new Date().getUTCFullYear() + index
     );
 
-    const rules = {
-      number: { required, creditCard },
-      name: { required },
-      expirationMonth: { required },
-      expirationYear: { required },
-      cvv: { required },
-    };
-
-    const creditCardModel = useValidate(rules, state.creditcard);
+    const creditCardModel = state.creditcard.toModel();
 
     async function handleSave() {
       const result = await creditCardModel.value.$validate();
