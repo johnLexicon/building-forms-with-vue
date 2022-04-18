@@ -57,6 +57,7 @@
               class="form-control"
               v-model="creditCardModel.number.$model"
             />
+            <validation-message :model="creditCardModel.number" />
           </div>
           <div>
             <label for="cardName">Name of card</label>
@@ -66,6 +67,7 @@
               class="form-control"
               v-model="creditCardModel.name.$model"
             />
+            <validation-message :model="creditCardModel.name" />
           </div>
           <div class="row">
             <div class="col">
@@ -85,6 +87,7 @@
                     {{ month.name }}
                   </option>
                 </select>
+                <validation-message :model="creditCardModel.expirationMonth" />
               </div>
             </div>
             <div class="col">
@@ -100,6 +103,7 @@
                     {{ year }}
                   </option>
                 </select>
+                <validation-message :model="creditCardModel.expirationYear" />
               </div>
             </div>
             <div class="col">
@@ -111,6 +115,7 @@
                   class="form-control"
                   v-model="creditCardModel.cvv.$model"
                 />
+                <validation-message :model="creditCardModel.cvv" />
               </div>
             </div>
           </div>
@@ -133,11 +138,13 @@ import AddressView from "./AddressView.vue";
 import state from "../state";
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import ValidationMessage from "@/components/ValidationMessage.vue";
 
 export default {
   name: "PaymentView",
   components: {
     AddressView,
+    ValidationMessage,
   },
   setup() {
     const payment = reactive(state);
